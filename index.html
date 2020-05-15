@@ -1,0 +1,365 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Using a-frame to create a labyrinth where you have to find a number of balls">
+    <meta name="keywords" content="HTML, JavaScript, a-frame">
+    <meta name="author" content="David Silva Troya">
+
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-simple-sun-sky@^1.2.2/simple-sun-sky.js"></script>
+    <script src="https://cdn.rawgit.com/lmalave/aframe-speech-command-component/master/dist/aframe-speech-command-component.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+        <!--First of all my mother language is Spanish, so if you are seen this, a lot of words that I'm 
+            using by id,class,function and more is in Spanish hahaha, a good oportunity to practice Spanish as
+            I practiced english learning about coding :D.  I hope you enjoy-->
+        <!--Primero debo decir que esto no s una traducción de lo de arriba jajaja a pesar de que 
+            empiezan con la misma palabra traducida. Suelo hacer divertido el codificar escribendo 
+            nombres raros a todo lo que puedo y a pesar de que al finalizar los cambio, a veces me 
+            da por dejarlo así para luego al volver atras, en todo lo que he codificado en mi vida,
+            ver mis primeros pasos, y comparar mis cambios para cnocer la mejora :3 asi que ya 
+            sabes lo que te espera allá abajo.. pdt: a muchas palabras no les he puesto 
+            tilde a propósito xdddd!-->
+
+        <!--INICIO PARA EL VISOR-->
+        <a-entity id="jugador" movement-controls kinematic-body mass='200'>
+            <a-entity id="vista" camera
+                position="0 1.7 0"
+                look-controls="pointerLockEnabled: true">
+                <a-entity id='puntero' cursor="fuse: true; fuseTimeout: 1000"
+                    position="0 0 -1"
+                    geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.03"
+                    material="color: white; shader: flat">
+                    <a-text id="mensaje" value="Hola :3 gracias por estar aqui, te quiero mucho :3" 
+                    position="-2.3 -1 -1" color="black" 
+                    speech-command__text="command: Hola; type: attribute; 
+                    attribute: value; value: en que puedo ayudar?">
+                </a-text>   
+                </a-entity>
+            </a-entity>
+        </a-entity>
+        <!--FIN PARA EL VISOR-->
+
+
+        <!--INICIO ENTIDAD PARA CREAR CAJA-->
+        <a-entity id="cajamagica"></a-entity>
+        <!--FIN ENTIDAD PARA CREAR CAJA-->
+
+        <!--INICIO ENTIDAD PARA CREAR CAJA-->
+        <a-entity id="paredes"></a-entity>
+        <!--FIN ENTIDAD PARA CREAR CAJA-->
+        
+        <!--INICIO ENTIDAD PARA CREAR ESFERA-->
+        <a-entity id="esferamagica"></a-entity>
+        <!--FIN ENTIDAD PARA CREAR ESFERA-->
+        
+        <!--INICIO ENTIDAD PARA CREAR CILINDRO-->
+        <a-entity id="cilindromagica"></a-entity>
+        <!--FIN ENTIDAD PARA CREAR CILINDRO-->
+
+
+        <!--INICIO ENTIDAD DE CAJA CON RECONOCIMIENTO DE VOZ-->
+        <a-entity onclick="document.querySelector('#cajita').setAttribute('Cositi', 'defaultColor: SKYBLUE; interval:1000')" ></a-entity>>
+            <a-box id = 'cajita' 
+            mass="50" 
+            dynamic-body position="-0.9 3 -3" 
+            src="#suelo"
+            rotation="0 45 0" 
+            color="#4CC3D9"
+            speech-command__color="command: cambiar color; type: attribute; attribute: color; color: red">
+            </a-box>
+        </a-entity>
+        <!--FIN ENTIDAD DE CAJA CON RECONOCIMIENTO DE VOZ-->
+
+        <!--INICIO DE ENTIDAD PARA  TEXTO-->
+        <a-entity onclick="document.querySelector('#boton').setAttribute('Cositi', 'defaultColor: SKYBLUE; interval:1000')" >
+            <a-cylinder id ='boton'
+            position="-1.2 2.2 -2.4" 
+            radius="0.1" 
+            height="0.2" 
+            rotation = '90 0 0'
+            color="#FACA5A">
+            </a-cylinder>
+            <a-text id='saludo'
+            value="Soy nuevo en esto, pero es divertido :3" 
+            position="-2 1.9 -2.1" color="black" 
+            speech-command__text="command: Hola; type: attribute; 
+            attribute: value; value: en que puedo ayudar?">
+            </a-text>    
+        </a-entity>
+        <!--FIN DE ENTIDAD PARA EL TEXTO-->
+        
+        <!--INICIO DE ENTIDAD PARA EL TORUS-->
+        <a-entity 
+        onclick="document.querySelector('#torito').setAttribute('Cositi', 'defaultColor: SKYBLUE; interval:1000')" ></a-entity>>
+            <a-torus id='torito' 
+            dynamic-body position = '2 2 -4' 
+            color="violet" 
+            arc='359'>
+            </a-torus>
+        </a-entity>
+        <!--FIN DE ENTIDAD PARA EL TORUS-->
+        
+        <!--INICIO DE ENTIDAD PARA LA ESFERA-->
+        <a-entity 
+        onclick="document.querySelector('#esferatro').setAttribute('Cositi', 'defaultColor: SKYBLUE; interval:1000')" ></a-entity>>
+            <a-sphere  id= 'esferatro' 
+            mass="100" 
+            dynamic-body 
+            position="-1.1 5 -1.2" 
+            radius="1.25" 
+            color="#EF2D5E">
+            </a-sphere>
+        </a-entity>
+        <!--FIN DE ENTIDAD PARA LA ESFERA-->
+        
+        <!--INICIO DE ENTIDAD PARA EL CILINDRO-->
+        <a-entity>
+            <a-cylinder id='cilindraco'
+            mass="50" 
+            dynamic-body
+            position="-1.2 2 -3" 
+            radius="0.5" 
+            height="1.5" 
+            color="#FFC65D"
+            ></a-cylinder>
+        </a-entity>
+        <!--FIN DE ENTIDAD PARA EL CILINDRO-->
+
+        <!--FIN DE ENTIDAD PARA EL TEXTO-->
+        <a-grid static-body width='300' depth='300' height='300'></a-grid>
+        <a-simple-sun-sky sun-position="0 1 0"></a-simple-sun-sky>
+        <!--a-entity id="annyang" annyang-speech-recognition></a-entity-->
+    </a-scene>
+    
+
+    <!--INICIO DE JAVASCRIPT CODE-->
+    <script>
+
+        //Para el reconocimiento de voz en español
+        annyang.setLanguage('es-ES')
+        
+        //variables globales
+        var alturaPared = 10
+        var anchuraPared = 5
+        var numPremios = 0
+        var copias = 1
+        var premiosInf, esfera, parete
+        var paraPared = document.querySelector('#paredes')
+        var paraPremio = document.querySelector('#esferamagica')
+
+
+        //Para cambiar de color al torus en intervalos de tiempo
+        AFRAME.registerComponent('Cositi',{
+            schema:{
+                interval: {
+                    type: 'number', default: 2000
+                },
+                defaultColor: {type: 'color', default: '#fff'}
+            },
+            init: function(){
+                var el = this.el
+                var interval = this.data.interval
+
+                var colors = ["red","yellow","blue"]
+                var i = 0
+                el.setAttribute('color', colors[0])
+                this.colorInterval= setInterval(function(){
+                    i= (i+1)% colors.length
+                    el.setAttribute('color', colors[i])
+                }, interval)
+
+            },
+            update: function(){},
+            remove: function(){
+                var el = this.el
+                var defaultColor = this.data.defaultColor
+                clearInterval(this.colorInterval)
+                el.setAttribute('color',defaultColor)
+            }
+
+        })
+
+
+        
+        
+        //detecta el click en el elemento antes seleccionado y crea una caja 
+        var torox= document.querySelector('#torito') // 'a-torus' puede ser reemplazado por una id o una clase
+        torox.addEventListener('click',function(){
+
+            for(var i=0;i<copias;i++){
+            crearElemto('#cajamagica','a-torus','#torito','yellow');
+            }
+            document.querySelector('#mensaje').setAttribute('value','jajajaja esa cosa..')
+            //torox.setAttribute('visible','false')
+            //torox.removeAttribute('dynamic-body')
+        })
+        var clox= document.querySelector('#esferatro') // 'a-torus' puede ser reemplazado por una id o una clase
+        clox.addEventListener('click',function(){
+            for(var i=0;i<copias;i++){
+                crearElemto('#cajamagica','a-sphere','#esferatro','blue');
+            }
+            document.querySelector('#mensaje').setAttribute('value','jajaja oye! cuidado la pierdes')
+        })
+        var box = document.querySelector('#cajita')
+        box.addEventListener('click',function(){
+            for(var i=0;i<copias;i++){
+                crearElemto('#cajamagica','a-box','#cajita','green');
+            }
+            document.querySelector('#mensaje').setAttribute('value','esto puede ser de ayuda... ;)')
+        })
+        var ciox = document.querySelector('#cilindraco')
+        ciox.addEventListener('click', function(){
+            for(var i=0;i<copias;i++){
+                crearElemto('#cajamagica','a-cylinder','#cilindraco','brown')
+            }
+            document.querySelector('#mensaje').setAttribute('value','problemas en el paraiso.. jaja')
+            
+        })
+        var salx = document.querySelector('#boton')
+        salx.addEventListener('click', function(){
+            copias=copias+1
+            if(copias <= 5){
+                document.querySelector('#saludo').setAttribute('value','Aumentemos el numero de copias a ' + copias)
+            }
+            else{
+                copias=1
+                document.querySelector('#saludo').setAttribute('value','Regresando el numero de copias a ' + copias)
+            }
+        })
+
+        function crearElemto(iddestino, elementoto, positon,colour){
+            var cajam= document.querySelector(iddestino)
+            var cajamagna = document.createElement(elementoto)
+            var posititi = document.querySelector(positon).getAttribute('position')//tomar posicion de a-torus
+            cajamagna.setAttribute('dynamic-body','')
+            cajamagna.setAttribute('position',posititi) //la posicion antes tomada
+            cajamagna.setAttribute('color',colour)
+            cajam.appendChild(cajamagna)
+        }
+
+        function crearPared(ubicacion){
+            parete = document.createElement('a-box')
+            paraPared.appendChild(parete) 
+            parete.setAttribute('static-body','')
+            parete.setAttribute('color','skyblue')
+            parete.setAttribute('height',alturaPared)
+            parete.setAttribute('width',anchuraPared)
+            parete.setAttribute('depth',anchuraPared)
+            parete.setAttribute('position',ubicacion)
+            
+        }
+
+        function ubicarPersonaje(ubicacion){
+            document.querySelector('#jugador').setAttribute('position', ubicacion)
+        }
+        
+        function crearPremio(ubicacion){
+            esfera = document.createElement('a-sphere')
+            //esfera.setAttribute('dynamic-body','')
+            esfera.setAttribute('class','premioxd')
+            esfera.setAttribute('color','violet')
+            esfera.setAttribute('position',ubicacion)
+            paraPremio.appendChild(esfera) 
+        }
+   
+
+        function crearMapa(){
+
+        var ubicacionInicial
+
+        for(var x=0;x<mapita.length;x++){
+            for(var y=0;y<mapita[x].length;y++){
+
+                var enx=(x - mapita.length/2)*anchuraPared
+                var eny=(y - mapita[x].length/2)*anchuraPared
+                
+                if(mapita[x][y]==0){
+                    continue
+                }
+                else if(mapita[x][y]==1){
+                    ubicacionInicial= enx + ' 0 ' + eny                  
+                    crearPared(ubicacionInicial);
+                }
+                else if(mapita[x][y]==2){
+                    //crearParedFragil(ubicacionInicial);
+                }
+                else if(mapita[x][y]==3){
+                    //crearParedTexto(ubicacionInicial,'');
+                }
+                else if(mapita[x][y]==4){
+                    ubicacionInicial= enx + ' 1.5 ' + eny 
+                    crearPremio(ubicacionInicial);
+                }
+                else if(mapita[x][y]==7){
+                    ubicacionInicial= enx + ' 1.7 ' + eny 
+                    ubicarPersonaje(ubicacionInicial);
+                }
+            }
+        }
+        premiosInf= Array.from(document.querySelectorAll('.premioxd'))
+        numPremios= premiosInf.length
+        }
+
+        var mapita=[
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 4, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 4, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 4, 1],
+            [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 4, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+            [1, 0, 4, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 1, 1, 4, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 4, 1],
+            [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1],
+            [1, 0, 1, 0, 1, 1, 1, 4, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 4, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 4, 0, 0, 1, 4, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 4, 1, 0, 1, 4, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 4, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 7, 1, 4, 1, 0, 1, 4, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ]
+
+    crearMapa();
+
+    premiosInf.forEach(function(esfera){
+            esfera.addEventListener('click',function(){
+                esfera.setAttribute('visible','false')
+                numPremios= numPremios-1 
+                //alert(numPremios)
+                if(numPremios<1){
+                    document.querySelector('#mensaje').setAttribute('value','HAZ GANADO!! ERES GENIAL, RECUERDALO SIEMPRE')
+                }
+                else if(numPremios>1){
+                    document.querySelector('#mensaje').setAttribute('value','hay '+ numPremios + ' bolitas aun')
+                    
+                }
+                else {
+                    document.querySelector('#mensaje').setAttribute('value','hay '+ numPremios + ' bolita aun')
+                }
+                
+            })
+
+        })
+
+    </script>
+  </body>
+</html>
