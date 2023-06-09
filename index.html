@@ -13,17 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
   </head>
   <body>
-    <a-scene>
-        <!--First of all my mother language is Spanish, so if you are seen this, a lot of words that I'm 
-            using by id,class,function and more is in Spanish hahaha, a good oportunity to practice Spanish as
-            I practiced english learning about coding :D.  I hope you enjoy-->
-        <!--Primero debo decir que esto no s una traducción de lo de arriba jajaja a pesar de que 
-            empiezan con la misma palabra traducida. Suelo hacer divertido el codificar escribendo 
-            nombres raros a todo lo que puedo y a pesar de que al finalizar los cambio, a veces me 
-            da por dejarlo así para luego al volver atras, en todo lo que he codificado en mi vida,
-            ver mis primeros pasos, y comparar mis cambios para cnocer la mejora :3 asi que ya 
-            sabes lo que te espera allá abajo.. pdt: a muchas palabras no les he puesto 
-            tilde a propósito xdddd!-->
+    <a-scene> 
 
         <!--INICIO PARA EL VISOR-->
         <a-entity id="jugador" movement-controls kinematic-body mass='200'>
@@ -34,7 +24,7 @@
                     position="0 0 -1"
                     geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.03"
                     material="color: white; shader: flat">
-                    <a-text id="mensaje" value="Hola :3 gracias por estar aqui, te quiero mucho :3" 
+                    <a-text id="mensaje" value="Hi! you have to find 21 balls!" 
                     position="-2.3 -1 -1" color="black" 
                     speech-command__text="command: Hola; type: attribute; 
                     attribute: value; value: en que puedo ayudar?">
@@ -346,14 +336,14 @@
                 numPremios= numPremios-1 
                 //alert(numPremios)
                 if(numPremios<1){
-                    document.querySelector('#mensaje').setAttribute('value','HAZ GANADO!! ERES GENIAL, RECUERDALO SIEMPRE')
+                    document.querySelector('#mensaje').setAttribute('value','YOU WON!! YOUR ARE AWESOME, REMEMBER THAT ALWAYS!')
                 }
                 else if(numPremios>1){
-                    document.querySelector('#mensaje').setAttribute('value','hay '+ numPremios + ' bolitas aun')
+                    document.querySelector('#mensaje').setAttribute('value','still '+ numPremios + ' balls to find')
                     
                 }
                 else {
-                    document.querySelector('#mensaje').setAttribute('value','hay '+ numPremios + ' bolita aun')
+                    document.querySelector('#mensaje').setAttribute('value','just '+ numPremios + ' more ball! and you will complete it!')
                 }
                 
             })
